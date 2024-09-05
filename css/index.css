@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+* {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font: 16px '맑은 고딕';
+    background-color: #F0EBE3;
+}
+
+.calculator {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 5vw;
+    background-color: #4F4E4D;
+}
+
+.input {
+    width: 100%;
+    height: 15vh;
+    margin-bottom: 3vh;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #F6F5F2;
+}
+
+.input > .number {
+    width: 100%;
+    height: 100%;
+    line-height: calc(15vh - 20px);
+    text-align: right;
+    /* font-weight: 500; */
+    font-size: 7vh;
+}
+
+.calc-btns {
+    display: grid;
+    grid-template-columns: repeat(4, 21vw);
+    gap: 2vw;
+    grid-template-rows: repeat(5, calc((100vh - 18vw - 18vh) / 5));
+}
+
+.calc-btns > button {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    font-size: 5vh;
+    cursor: pointer;
+}
+
+.calc-btns > .dark {
+    transition: background-color 0.2s ease-in-out;
+    background-color: #FABFCB;
+}
+
+.calc-btns > .dark:hover {
+    background-color: rgb(238, 142, 161);
+}
+
+.calc-btns > .light {
+    transition: background-color 0.2s ease-in-out;
+    background-color: #FFEFEF;
+}
+
+.calc-btns > .light:hover {
+    background-color: #fbf5f5;
+}
+
+@media screen and (min-width: 769px) {
+    body {
+        position: relative;
+    }
+
+    .calculator {
+        position: absolute;
+        left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        height: 600px;
+        padding: 30px;
+        border-radius: 10px;
+    }
+
+    .input {
+        height: 100px;
+        margin-bottom: 20px;
+    }
+
+    .input > .number {
+        line-height: 80px;
+        text-align: right;
+        font-size: 2.5rem;
+    }
+
+    .calc-btns {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        grid-template-rows: repeat(5, 74.4px);
+    }
+
+    .calc-btns > button {
+        font-size: 2rem;
+    }
+}
