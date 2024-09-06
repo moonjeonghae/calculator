@@ -1,5 +1,4 @@
 window.onload = function() {
-    // #숫자 버튼을 누르면 숫자 나오게 하기
     const numberDisplay = document.querySelector('.number');
     const numBtns = document.querySelectorAll('.num');
     const pointBtn = document.querySelector('.point');
@@ -8,39 +7,72 @@ window.onload = function() {
     let currentNum = '';
     let previousNum = '';
     let operator = '';
-    // # .버튼을 눌렀을 때 .이 입력되게 하기
+    let isResult = false;
 
     numBtns.forEach(numBtn => {
         numBtn.addEventListener('click', () => {
-            const newNum = numBtn.textContent;
+            if (isResult) {
+                currentNum = '';
+                isResult = false;
+            }
 
-            currentNum += newNum;
+            const newNum = numBtn.textContent;
+           
+            if(currentNum === '0') {
+                if(newNum === '0') {
+                    return;
+                } else if(newNum !== '.') {
+                    currentNum = newNum;
+                }
+                else {
+                    currentNum += newNum;
+                }
+            }
+            else {
+                currentNum += newNum;
+            }
+
             numberDisplay.textContent = currentNum;
         });
     });
 
-    // # 소숫점 버튼 눌렀을 때
     pointBtn.addEventListener('click', () => {
-        if(currentNum.includes('.')) return;
-        currentNum += '.';
-        numberDisplay.textContent = currentNum;
+        if (isResult) {
+            currentNum = '';
+            isResult = false;
+        }
+        
+        if(!currentNum.includes('.')) {
+            if(currentNum === '') {
+                currentNum = '0';
+            }
+            currentNum += '.';
+            numberDisplay.textContent = currentNum;
+        }
     });
 
-    // # 음수/양수 버튼 눌렀을 때
     signToggleBtn.addEventListener('click', () => {
-        if(currentNum === '') return;
-        
-        if(currentNum.startsWith('-')) {
-            currentNum = currentNum.substring('1');
+        if(numberDisplay.textContent === '') return;
+    
+        let displayNum = numberDisplay.textContent;
+
+        if(displayNum.startsWith('-')) {
+            displayNum = displayNum.substring(1);
         } else {
-            currentNum = '-' + currentNum;
+            displayNum = '-' + displayNum;
         }
 
-        numberDisplay.textContent = currentNum;
+        numberDisplay.textContent = displayNum;
+
+        if (!isResult) {
+            currentNum = displayNum;
+        } else {
+            previousNum = displayNum;
+        }
     });
 
-    // clear 버튼 누르면 초기화 시키기
     const clearBtn = document.querySelector('.clear');
+    const clearEntryBtn = document.querySelector('.clear-entry');
 
     clearBtn.addEventListener('click', () => {
         numberDisplay.textContent = '';
@@ -49,33 +81,33 @@ window.onload = function() {
         operator = '';
     });
 
-    // #계산 부호 버튼 누르면 해당되는 계산 되게 하기
+    clearEntryBtn.addEventListener('click', () => {
+        numberDisplay.textContent = '';
+        currentNum = '';
+    });
+
     const operatorBtns = document.querySelectorAll('.operator');
 
     operatorBtns.forEach(operatorBtn => {
         operatorBtn.addEventListener('click', () => {
-            // ##1. 현재 입력된 숫자가 없을 시
             if(currentNum === '' && previousNum === '') 
-                // ##1-1. operator 무시
                 return;
 
-            // ##1. 처음 입력한 숫자만 있을 시
             if (currentNum !== '' && previousNum === '') {
                 previousNum = currentNum;
-                currentNum = '';  // 현재 숫자 리셋
+                currentNum = '';
             }
-            // ##2. 처음 입력한 숫자와 그 다음에 입력한 숫자가 있을 시
             else if (currentNum !== '' && previousNum !== '') {
                 previousNum = calculate(previousNum, currentNum, operator);
                 numberDisplay.textContent = previousNum;
-                currentNum = '';  // 현재 숫자 리셋
+                currentNum = ''; 
             }
 
             operator = operatorBtn.textContent;
+            isResult = false;
         });
     });
 
-    // #계산 부호 사용 함수 
     function calculate(num1, num2, operator) {
         num1 = Number(num1);
         num2 = Number(num2);
@@ -87,7 +119,7 @@ window.onload = function() {
             break;
             case '-' : result = num1 - num2;
             break;
-            case 'X' : result = num1 * num2;
+            case 'x' : result = num1 * num2;
             break;
             case '/' : result = num1 / num2;
             break;
@@ -99,7 +131,6 @@ window.onload = function() {
         return result;
     }
 
-    // # 결과 버튼 눌렀을 때
     const resultBtn = document.querySelector('.result');
 
     resultBtn.addEventListener('click', () => {
@@ -108,6 +139,7 @@ window.onload = function() {
             numberDisplay.textContent = previousNum;
             currentNum = ''; 
             operator = '';
+            isResult = true;
         }
     });
 }
